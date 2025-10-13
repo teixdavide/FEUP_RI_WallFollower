@@ -2,15 +2,93 @@
 EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/objects/backgrounds/protos/TexturedBackground.proto"
 EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/objects/backgrounds/protos/TexturedBackgroundLight.proto"
 EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/objects/floors/protos/RectangleArena.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/objects/geometries/protos/Extrusion.proto"
+
 WorldInfo {
 }
+
 Viewpoint {
   orientation -0.5773 0.5773 0.5773 2.0944
-  position 0 0 10
+  position 0 5 10
+  fieldOfView 0.8
 }
-TexturedBackground {
-}
-TexturedBackgroundLight {
-}
+
+TexturedBackground { }
+TexturedBackgroundLight { }
+
+# Room / Arena
 RectangleArena {
+  floorSize 10 10
+  wallThickness 0.05
+  wallHeight 0.5
+  floorAppearance PBRAppearance {
+    baseColor 0.8 0.8 0.8
+    roughness 1.0
+  }
 }
+
+# --- Curved Wall in a Tilde (~) shape ---
+# We'll approximate the tilde using small wall segments
+Transform {
+  translation 0 0 0.05
+  children [
+    Shape {
+      appearance PBRAppearance {
+        baseColor 0.1 0.1 0.1
+        roughness 1.0
+      }
+      geometry IndexedLineSet {
+        coord Coordinate {
+          point [
+            -4  0.5 0,
+            -3  0.0 0,
+            -2 -0.5 0,
+            -1  0.0 0,
+             0  0.5 0,
+             1  0.0 0,
+             2 -0.5 0,
+             3  0.0 0,
+             4  0.5 0
+          ]
+        }
+        coordIndex [0,1,2,3,4,5,6,7,8,-1]
+      }
+    }
+  ]
+}
+
+# --- Smooth Curved Wall (tilde ~ shape) using Extrusion ---
+Transform {
+  translation 0 0 0.15
+  children [
+    Shape {
+      appearance PBRAppearance {
+        baseColor 0.1 0.1 0.1
+        roughness 1.0
+        metalness 0.0
+      }
+      geometry Extrusion {
+        crossSection [
+          -0.025 -0.15,
+           0.025 -0.15,
+           0.025  0.15,
+          -0.025  0.15,
+          -0.025 -0.15
+        ]
+        spine [
+          -4  0.5 0,
+          -3  0.0 0,
+          -2 -0.5 0,
+          -1  0.0 0,
+           0  0.5 0,
+           1  0.0 0,
+           2 -0.5 0,
+           3  0.0 0,
+           4  0.5 0
+        ]
+        endCap TRUE
+      }
+    }
+  ]
+}
+
