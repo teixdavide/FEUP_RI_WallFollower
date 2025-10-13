@@ -23,6 +23,11 @@ add_executable(lateral_controller
   src/lateral_controller.cpp
 )
 
+install(
+  DIRECTORY launch
+  DESTINATION share/${PROJECT_NAME}
+)
+
 # Link ROS 2 dependencies
 ament_target_dependencies(lateral_controller
   rclcpp

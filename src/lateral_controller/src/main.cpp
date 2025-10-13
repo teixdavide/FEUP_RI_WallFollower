@@ -3,6 +3,8 @@
 int main(){
     rclcpp::init(0, nullptr);
 
+    config_file = declare_parameter<std::string>("config_file", "config/lateral_controller.yaml");
+
     auto pid_controller = PID(1.0, 0.1, 0.05, 10.0);
     double desired_distance = 2.0;
 

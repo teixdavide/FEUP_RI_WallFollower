@@ -1,7 +1,6 @@
+desired_distance: 5.0
 pid:
   kp: 0.5
   ki: 0.1
   kd: 0.05
   anti_windup: 10.0
-
-desired_distance: 5.0
