@@ -1,3 +1,5 @@
+#pragma once
+
 class PID {
     private:
         double kp; // Proportional gain
@@ -19,4 +21,4 @@ class PID {
 
         double calculate_control(double setpoint, double measured_value, double dt);
 
-}
+};
