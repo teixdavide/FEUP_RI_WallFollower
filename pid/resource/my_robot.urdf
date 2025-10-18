@@ -1,0 +1,14 @@
+<?xml version="1.0" ?>
+<robot name="My robot">
+    <webots>
+        <device reference="lidar" type="Lidar">
+            <ros>
+                <topicName>scan</topicName>
+                <frameName>lidar</frameName>
+                <alwaysOn>true</alwaysOn>
+                <publishPointCloud>false</publishPointCloud>
+            </ros>
+        </device>
+        <plugin type="my_robot_driver::MyRobotDriver" />
+    </webots>
+</robot>
