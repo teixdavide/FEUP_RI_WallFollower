@@ -8,7 +8,7 @@ from webots_ros2_driver.webots_controller import WebotsController
 
 
 def generate_launch_description():
-    package_dir = get_package_share_directory('pid')
+    package_dir = get_package_share_directory('ri_assign1')
     robot_description_path = os.path.join(package_dir, 'resource', 'my_robot.urdf')
 
     webots = WebotsLauncher(
@@ -27,7 +27,7 @@ def generate_launch_description():
     )
 
     leader = Node(
-        package='pid',
+        package='ri_assign1',
         executable='wall_follower',
         namespace='leader',
         parameters=[
@@ -37,16 +37,15 @@ def generate_launch_description():
             {"kd": 0.1},
             {"max_angular_speed": 0.5},
             {"forward_speed": 0.1},
-            {"wait_for_follower": True},
-            {"follower_proximity_topic": "/follower/proximity_ok"},
             {"scan_topic": "/my_robot/scan"},
             {"cmd_vel_topic": "/my_robot/cmd_vel"},
-            {"follower_timeout": 2.0},
-            {"wait_linear_speed": 0.0},
+            {"is_leader": True},
+            {"leader_detect_threshold": 0.5},
+            {"leader_detect_half_deg": 20.0},
         ],
     )
     follower = Node(
-        package='pid',
+        package='ri_assign1',
         executable='wall_follower',
         namespace='follower',
         parameters=[
@@ -58,8 +57,6 @@ def generate_launch_description():
             {"forward_speed": 0.1},
             {"scan_topic": "/follower/scan"},
             {"cmd_vel_topic": "/follower/cmd_vel"},
-            {"follower_proximity_topic": "/follower/proximity_ok"},
-            {"publish_proximity": True},
             {"use_sinusoidal_speed": True},
             {"sin_speed_amplitude": 0.05},
             {"sin_speed_period": 4.0},

@@ -1,5 +1,7 @@
 # Compile
 
 ````
-colcon build --packages-up-to lateral_controller longitudinal_controller
+colcon build
+source install/local_setup.bash
+ros2 launch ri_assign1 robot_launch.py
 ```
