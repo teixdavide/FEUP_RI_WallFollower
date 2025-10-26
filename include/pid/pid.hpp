@@ -19,6 +19,6 @@ class PID {
 
         double calculate_derivative(double error, double dt);
 
-        double calculate_control(double setpoint, double measured_value, double dt);
+        double calculate_control(double setpoint, double measured_value, double dt, bool leader);
 
 };

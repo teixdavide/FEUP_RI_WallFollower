@@ -1,6 +1,9 @@
 
 #include "pid/wall_follower.hpp"
 
+#include <fstream>
+#include <chrono>
+
 WallFollower::WallFollower()
     : Node("wall_follower"),
       // Required / primary parameters
@@ -65,6 +68,8 @@ double WallFollower::estimateDistance(const sensor_msgs::msg::LaserScan &scan, d
 
 void WallFollower::scanCallback(const sensor_msgs::msg::LaserScan::SharedPtr msg)
 {
+    auto start_time = std::chrono::high_resolution_clock::now();
+
     if (msg->ranges.empty())
         return;
 
@@ -91,8 +96,6 @@ void WallFollower::scanCallback(const sensor_msgs::msg::LaserScan::SharedPtr msg
         linear = candidate;
     }
     
-    
-    
     double ang_cmd = 0.0;
 
     // If no wall detected (right_dist >= scan.range_max), go straight
@@ -109,7 +112,7 @@ void WallFollower::scanCallback(const sensor_msgs::msg::LaserScan::SharedPtr msg
             }
             last_time = t;
         }
-        ang_cmd = pid_.calculate_control(desired_dist_, right_dist, dt);
+        ang_cmd = pid_.calculate_control(desired_dist_, right_dist, dt, is_leader_);
         if (ang_cmd > max_ang_speed_)
             ang_cmd = max_ang_speed_;
         else if (ang_cmd < -max_ang_speed_)
@@ -133,6 +136,14 @@ void WallFollower::scanCallback(const sensor_msgs::msg::LaserScan::SharedPtr msg
                          right_dist, desired_dist_, ang_cmd, cmd.angular.z, cmd.linear.x);
 
     pub_->publish(cmd);
+
+    auto end_time = std::chrono::high_resolution_clock::now();
+    auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end_time - start_time).count();
+
+    std::ofstream logfile("loop_time.txt", std::ios::app);
+    if (logfile.is_open()) {
+        logfile << duration << std::endl;
+    }
 }
 
 int main(int argc, char **argv)

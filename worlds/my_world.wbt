@@ -281,3 +281,11 @@ Robot {
   controller "<extern>"
   name "follower"
 }
+
+Robot {
+  physics Physics {
+  }
+  controller "position_track"
+  name "supervisor"
+  supervisor TRUE
+}
